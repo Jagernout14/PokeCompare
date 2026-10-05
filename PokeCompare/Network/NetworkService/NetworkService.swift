@@ -9,11 +9,16 @@ import Foundation
 
 final class NetworkService {
     
+    // MARK: - Public Properties
     static let shared = NetworkService()
+    
+    // MARK: - Private Properties
     private let baseUrlString = "https://pokeapi.co/api/v2/pokemon"
     
+    // MARK: - Initializers
     private init() {}
     
+    // MARK: - Public Methods
     func fetchPokemonList(limit: Int, offset: Int) async throws -> PokemonListResponse {
         guard var components = URLComponents(string: baseUrlString) else {
             throw NetworkError.badUrl
@@ -39,6 +44,7 @@ final class NetworkService {
         return try await fetchRequest(url: url)
     }
     
+    // MARK: - Private Methods
     private func fetchRequest<T: Decodable>(url: URL) async throws -> T {
         let request = URLRequest(url: url)
         let data: Data
