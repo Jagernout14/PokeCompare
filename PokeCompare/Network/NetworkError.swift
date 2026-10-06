@@ -13,5 +13,6 @@ enum NetworkError: Error {
     case decodeError
     case encodeError
     case unknownError
+    case responseError
     case authorizationProblem
 }
