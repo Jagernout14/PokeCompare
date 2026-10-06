@@ -11,6 +11,8 @@ enum NetworkError: Error {
     case clientError(Int)
     case serverError(Int)
     case decodeError
+    case encodeError
     case unknownError
+    case responseError
     case authorizationProblem
 }
