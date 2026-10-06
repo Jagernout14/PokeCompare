@@ -60,7 +60,7 @@ extension PokemonListViewController: UITableViewDataSource {
         }
         
         let pokemon = viewModel.pokemons[indexPath.row]
-        cell.configure(name: pokemon.name, number: indexPath.row + 1, isSelected: true)
+        cell.configure(name: pokemon.name, number: pokemon.id ?? 1, isSelected: true)
         return cell
     }
 }
