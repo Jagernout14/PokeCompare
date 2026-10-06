@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class NetworkClient {
+final class NetworkClient: NetworkClientProtocol {
     
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
         let request = try endpoint.makeRequest()
