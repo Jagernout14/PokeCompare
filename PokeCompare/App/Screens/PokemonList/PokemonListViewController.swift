@@ -32,6 +32,7 @@ final class PokemonListViewController: UIViewController {
         super.viewDidLoad()
         
         listView.tableView.dataSource = self
+        listView.tableView.delegate = self
         bind()
         viewModel.loadPokemons()
         title = "Pokémon"
@@ -60,7 +61,16 @@ extension PokemonListViewController: UITableViewDataSource {
         }
         
         let pokemon = viewModel.pokemons[indexPath.row]
-        cell.configure(name: pokemon.name, number: pokemon.id ?? 1, isSelected: true)
+        cell.configure(name: pokemon.name, number: pokemon.id ?? 0, isSelected: viewModel.isSelected(pokemon))
         return cell
+    }
+}
+
+//MARK: - TableViewDelegate
+extension PokemonListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pokemon = viewModel.pokemons[indexPath.row]
+        viewModel.toggleSelection(pokemon)
+        tableView.reloadData()
     }
 }
