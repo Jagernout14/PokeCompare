@@ -35,6 +35,7 @@ final class PokemonListViewController: UIViewController {
         listView.tableView.delegate = self
         bind()
         viewModel.loadPokemons()
+        setupActions()
         title = "Pokémon"
     }
     
@@ -46,6 +47,15 @@ final class PokemonListViewController: UIViewController {
         viewModel.onError = { message in
             print(message)
         }
+    }
+    
+    private func setupActions() {
+        listView.compareButton.addTarget(self, action: #selector(compareTapped), for: .touchUpInside)
+    }
+    
+    @objc private func compareTapped() {
+        print(viewModel.selected.map { $0.name})
+        
     }
 }
 
@@ -71,6 +81,7 @@ extension PokemonListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let pokemon = viewModel.pokemons[indexPath.row]
         viewModel.toggleSelection(pokemon)
+        listView.compareButton.isEnabled = viewModel.canCompare
         tableView.reloadData()
     }
 }

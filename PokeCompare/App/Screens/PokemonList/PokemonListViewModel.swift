@@ -12,6 +12,9 @@ final class PokemonListViewModel {
     var onPokemonsUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
     
+    //MARK: - Public Properties
+    var canCompare: Bool { selected.count == 2 }
+    
     // MARK: - Private Properties
     private let client: NetworkClientProtocol
     private(set) var pokemons: [PokemonListItem] = []
