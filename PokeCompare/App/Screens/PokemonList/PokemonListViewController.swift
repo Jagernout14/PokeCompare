@@ -5,40 +5,23 @@
 //  Created by Роман Пичугин on 04.10.2026.
 //
 
-//MARK: - MockData
-struct MockPokemon {
-    let name: String
-    let number: Int
-}
-
-extension MockPokemon {
-    static let list: [MockPokemon] = [
-        MockPokemon(name: "bulbasaur", number: 1),
-        MockPokemon(name: "ivysaur", number: 2),
-        MockPokemon(name: "venusaur", number: 3),
-        MockPokemon(name: "charmander", number: 4),
-        MockPokemon(name: "charmeleon", number: 5),
-        MockPokemon(name: "charizard", number: 6),
-        MockPokemon(name: "squirtle", number: 7),
-        MockPokemon(name: "wartortle", number: 8),
-        MockPokemon(name: "blastoise", number: 9),
-        MockPokemon(name: "pikachu", number: 25),
-        MockPokemon(name: "mewtwo", number: 150),
-        MockPokemon(name: "fletchinder", number: 662),
-        MockPokemon(name: "crabominable", number: 740),
-        MockPokemon(name: "corviknight", number: 823),
-        MockPokemon(name: "squawkabilly", number: 931)
-    ]
-}
-
-
 import UIKit
 
 final class PokemonListViewController: UIViewController {
     
     // MARK: - Private Properties
     private let listView = PokemonListView()
-    private let pokemons = MockPokemon.list
+    private let viewModel: PokemonListViewModel
+    
+    // MARK: - Initializers
+    init(viewModel: PokemonListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Overrides Methods
     override func loadView() {
@@ -49,16 +32,37 @@ final class PokemonListViewController: UIViewController {
         super.viewDidLoad()
         
         listView.tableView.dataSource = self
-        
-        
+        listView.tableView.delegate = self
+        bind()
+        viewModel.loadPokemons()
+        setupActions()
         title = "Pokémon"
+    }
+    
+    // MARK: - Private Methods
+    private func bind() {
+        viewModel.onPokemonsUpdated = { [weak self] in
+            self?.listView.tableView.reloadData()
+        }
+        viewModel.onError = { message in
+            print(message)
+        }
+    }
+    
+    private func setupActions() {
+        listView.compareButton.addTarget(self, action: #selector(compareTapped), for: .touchUpInside)
+    }
+    
+    @objc private func compareTapped() {
+        print(viewModel.selected.map { $0.name})
+        
     }
 }
 
 //MARK: - TableViewDataSource
 extension PokemonListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        pokemons.count
+        viewModel.pokemons.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -66,8 +70,24 @@ extension PokemonListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let pokemon = pokemons[indexPath.row]
-        cell.configure(name: pokemon.name, number: pokemon.number, isSelected: true)
+        let pokemon = viewModel.pokemons[indexPath.row]
+        cell.configure(name: pokemon.name, number: pokemon.id ?? 0, isSelected: viewModel.isSelected(pokemon), spriteURL: pokemon.spriteURL)
         return cell
+    }
+}
+
+//MARK: - TableViewDelegate
+extension PokemonListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pokemon = viewModel.pokemons[indexPath.row]
+        viewModel.toggleSelection(pokemon)
+        listView.compareButton.isEnabled = viewModel.canCompare
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.pokemons.count - 1 {
+            viewModel.loadPokemons()
+        }
     }
 }

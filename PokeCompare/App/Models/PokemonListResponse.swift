@@ -5,12 +5,26 @@
 //  Created by Роман Пичугин on 03.10.2026.
 //
 
+import Foundation
+
 struct PokemonListResponse: Decodable {
     let next: String?
     let results: [PokemonListItem]
 }
 
-struct PokemonListItem: Decodable {
+struct PokemonListItem: Decodable, Equatable {
     let name: String
     let url: String
+}
+
+extension PokemonListItem {
+    var id: Int? {
+        guard let url = URL(string:url) else { return nil }
+        return Int(url.lastPathComponent)
+    }
+    
+    var spriteURL: URL? {
+        guard let id else { return nil }
+        return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(id).png")
+    }
 }

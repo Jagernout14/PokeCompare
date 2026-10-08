@@ -5,6 +5,7 @@
 //  Created by Роман Пичугин on 04.10.2026.
 //
 import UIKit
+import Kingfisher
 
 final class PokemonListCell: UITableViewCell {
     
@@ -29,11 +30,19 @@ final class PokemonListCell: UITableViewCell {
         fatalError("Init(coder:) has not be implemented")
     }
     
+    // MARK: - Overrides Methods
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pokemonImage.kf.cancelDownloadTask()
+        pokemonImage.image = UIImage(systemName: "questionmark.circle")
+    }
+    
     // MARK: - Public Methods
-    func configure(name: String, number: Int, isSelected: Bool) {
+    func configure(name: String, number: Int, isSelected: Bool, spriteURL: URL?) {
         nameLabel.text = name.capitalized
         numberLabel.text = String(format: "#%03d", number)
         checkmarkImage.isHidden = !isSelected
+        pokemonImage.kf.setImage(with: spriteURL, placeholder: UIImage(systemName: "questionmark.circle"))
     }
     
     // MARK: - Private Methods
@@ -45,9 +54,7 @@ final class PokemonListCell: UITableViewCell {
     }
     
     private func setupImage() {
-        pokemonImage.image = UIImage(systemName: "questionmark.circle")
         pokemonImage.contentMode = .scaleAspectFit
-        
         pokemonImage.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(pokemonImage)

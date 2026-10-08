@@ -11,13 +11,13 @@ final class PokemonListView: UIView {
     
     // MARK: - Public Properties
     let tableView = UITableView()
+    let compareButton = UIButton(configuration: .filled())
     
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(resource: .pokeBackgroundGrey)
-        setupTableView()
-        setupConstraints()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -25,6 +25,12 @@ final class PokemonListView: UIView {
     }
     
     // MARK: - Private Methods
+    private func setupUI() {
+        setupTableView()
+        setupCompareButton()
+        setupConstraints()
+    }
+    
     private func setupTableView() {
         tableView.backgroundColor = UIColor(resource: .pokeBackgroundGrey)
         tableView.register(PokemonListCell.self, forCellReuseIdentifier: PokemonListCell.reuseIdentifier)
@@ -33,6 +39,17 @@ final class PokemonListView: UIView {
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(tableView)
+        
+        tableView.contentInset.bottom = 80
+        tableView.verticalScrollIndicatorInsets.bottom = 80
+    }
+    
+    private func setupCompareButton() {
+        compareButton.configuration?.title = "Сравнить"
+        compareButton.isEnabled = false
+        
+        compareButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(compareButton)
     }
     
     private func setupConstraints() {
@@ -40,7 +57,12 @@ final class PokemonListView: UIView {
             tableView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
+            compareButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            compareButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            compareButton.heightAnchor.constraint(equalToConstant: 50),
+            compareButton.widthAnchor.constraint(equalToConstant: 200)
         ])
     }
 }
