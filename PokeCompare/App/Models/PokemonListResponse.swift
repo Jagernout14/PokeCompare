@@ -22,4 +22,9 @@ extension PokemonListItem {
         guard let url = URL(string:url) else { return nil }
         return Int(url.lastPathComponent)
     }
+    
+    var spriteURL: URL? {
+        guard let id else { return nil }
+        return URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(id).png")
+    }
 }
