@@ -19,8 +19,11 @@ final class PokemonListViewModel {
     private let client: NetworkClientProtocol
     private(set) var pokemons: [PokemonListItem] = []
     private(set) var selected: [PokemonListItem] = []
+    
     private let limit = 20
     private var offset = 0
+    private var isLoading = false
+    private var hasMore = true
     
     // MARK: - Initializers
     init(client: NetworkClientProtocol) {
@@ -29,9 +32,15 @@ final class PokemonListViewModel {
     
     // MARK: - Public Methods
     func loadPokemons() {
+        guard !isLoading, hasMore else {
+            return
+        }
+        isLoading = true
         Task {
+            defer { isLoading = false }
             do {
                 let response: PokemonListResponse = try await client.request(PokemonEndpoint.list(limit: limit, offset: offset))
+                hasMore = response.next != nil
                 pokemons += response.results
                 offset += limit
                 onPokemonsUpdated?()

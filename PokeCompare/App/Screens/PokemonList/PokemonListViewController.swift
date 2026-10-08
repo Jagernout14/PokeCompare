@@ -84,4 +84,10 @@ extension PokemonListViewController: UITableViewDelegate {
         listView.compareButton.isEnabled = viewModel.canCompare
         tableView.reloadData()
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.pokemons.count - 1 {
+            viewModel.loadPokemons()
+        }
+    }
 }
