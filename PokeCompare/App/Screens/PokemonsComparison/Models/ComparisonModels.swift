@@ -5,6 +5,8 @@
 //  Created by Роман Пичугин on 09.10.2026.
 //
 
+import Foundation
+
 enum StatComparisonResult {
     case higher
     case lower
@@ -18,7 +20,7 @@ struct StatRow {
 }
 
 struct PokemonColumnDisplay {
-    let imageURL: String
+    let imageURL: URL?
     let name: String
     let weight: String
     let height: String
