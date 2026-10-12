@@ -19,8 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel = PokemonListViewModel(client: client)
         let viewController = PokemonListViewController(viewModel: viewModel)
         let navigationController = UINavigationController(rootViewController: viewController)
-       // window?.rootViewController = navigationController
-        window?.rootViewController = ComparisonViewController()
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 }
