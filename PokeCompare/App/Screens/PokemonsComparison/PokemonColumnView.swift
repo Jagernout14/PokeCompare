@@ -10,6 +10,7 @@ import Kingfisher
 
 final class PokemonColumnView: UIView {
     
+    // MARK: - Private Properties
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = UIColor(resource: .pokeSecondaryTextGrey)
@@ -52,6 +53,7 @@ final class PokemonColumnView: UIView {
         return statStackView
     }()
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -63,6 +65,25 @@ final class PokemonColumnView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
+    func configure(with display: PokemonColumnDisplay) {
+        imageView.kf.setImage(with: display.imageURL)
+        nameLabel.text = display.name
+        weightLabel.text = display.weight
+        heightLabel.text = display.height
+        
+        for view in statStackView.arrangedSubviews {
+            view.removeFromSuperview()
+        }
+        
+        for stat in display.stats {
+            let rowView = StatRowView()
+            rowView.configure(with: stat)
+            statStackView.addArrangedSubview(rowView)
+        }
+    }
+    
+    // MARK: - Private Methods
     private func setupViews() {
         addSubview(imageView)
         addSubview(nameLabel)
@@ -95,22 +116,5 @@ final class PokemonColumnView: UIView {
             statStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             statStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-    
-    func configure(with display: PokemonColumnDisplay) {
-        imageView.kf.setImage(with: display.imageURL)
-        nameLabel.text = display.name
-        weightLabel.text = display.weight
-        heightLabel.text = display.height
-        
-        for view in statStackView.arrangedSubviews {
-            view.removeFromSuperview()
-        }
-        
-        for stat in display.stats {
-            let rowView = StatRowView()
-            rowView.configure(with: stat)
-            statStackView.addArrangedSubview(rowView)
-        }
     }
 }
