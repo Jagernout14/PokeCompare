@@ -9,38 +9,45 @@ import UIKit
 
 final class ComparisonViewController: UIViewController {
     
+    // MARK: - Private Properties
     private let comparisonView = ComparisonView()
+    private let viewModel: ComparisonViewModel
     
+    // MARK: - Initializers
+    init(viewModel: ComparisonViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - Overrides Methods
     override func loadView() {
         view = comparisonView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //MockData
-        let pikachu = PokemonColumnDisplay(imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"),
-                                           name: "Pikachu",
-                                           weight: "6 kg",
-                                           height: "40 cm",
-                                           stats: [
-                                            StatRow(name: "HP", value: 35, comparison: .lower),
-                                            StatRow(name: "Attack", value: 55, comparison: .higher),
-                                            StatRow(name: "Defense", value: 40, comparison: .equal)
-                                           ]
-        )
-        let bulbasaur = PokemonColumnDisplay(imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"),
-                                             name: "Bulbasaur",
-                                             weight: "6 kg",
-                                             height: "50 cm",
-                                             stats: [
-                                                StatRow(name: "HP", value: 45, comparison: .higher),
-                                                StatRow(name: "Attack", value: 22, comparison: .lower),
-                                                StatRow(name: "Defense", value: 40, comparison: .equal)
-                                             ]
-        )
-        
-        comparisonView.configure(left: pikachu, right: bulbasaur)
-        
+        bind()
+        viewModel.load()
+    }
+    
+    // MARK: - Private Methods
+    private func bind() {
+        viewModel.onResult = { [weak self]  left, right in
+            self?.comparisonView.configure(left: left, right: right)
+        }
+        viewModel.onError = { [weak self] error in
+            self?.showError(error)
+        }
+        //TODO: - viewModel.onLoading
+    }
+    
+    private func showError(_ error: Error) {
+        let controller = UIAlertController(title: "Ошибка", message: "Проблема с загрузкой данных", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        controller.addAction(action)
+        present(controller, animated: true)
     }
 }
