@@ -5,7 +5,7 @@
 //  Created by Роман Пичугин on 26.09.2026.
 //
 
-struct Pokemon: Decodable {
+nonisolated struct Pokemon: Decodable {
     let id: Int
     let name: String
     let height: Int
@@ -15,32 +15,30 @@ struct Pokemon: Decodable {
     let sprites: Sprites
 }
 
-struct PokemonType: Decodable {
+nonisolated struct PokemonType: Decodable {
     let slot: Int
     let type: TypeDetail
 }
 
-struct TypeDetail: Decodable {
+nonisolated struct TypeDetail: Decodable {
     let name: String
 }
 
-struct PokemonStat: Decodable {
+nonisolated struct PokemonStat: Decodable {
     let baseStat: Int
-    let effort: Int
     let stat: StatDetail
     
     enum CodingKeys: String, CodingKey {
         case baseStat = "base_stat"
-        case effort
         case stat
     }
 }
 
-struct StatDetail: Decodable {
+nonisolated struct StatDetail: Decodable {
     let name: String
 }
 
-struct Sprites: Decodable {
+nonisolated struct Sprites: Decodable {
     let frontDefault: String?
     let other: OtherSprites
     
@@ -50,7 +48,7 @@ struct Sprites: Decodable {
     }
 }
 
-struct OtherSprites: Decodable {
+nonisolated struct OtherSprites: Decodable {
     let officialArtwork: OfficialArtwork
     
     enum CodingKeys: String, CodingKey {
@@ -58,7 +56,7 @@ struct OtherSprites: Decodable {
     }
 }
 
-struct OfficialArtwork: Decodable {
+nonisolated struct OfficialArtwork: Decodable {
     let frontDefault: String?
     
     enum CodingKeys: String, CodingKey {

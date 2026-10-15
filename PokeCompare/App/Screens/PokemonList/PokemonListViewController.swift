@@ -54,8 +54,16 @@ final class PokemonListViewController: UIViewController {
     }
     
     @objc private func compareTapped() {
-        print(viewModel.selected.map { $0.name})
+        guard viewModel.canCompare else {
+            return
+        }
+        let leftName = viewModel.selected[0].name
+        let rightName = viewModel.selected[1].name
         
+        let client = NetworkClient()
+        let comparisonViewModel = ComparisonViewModel(client: client, leftName: leftName, rightName: rightName)
+        let comparisonViewController = ComparisonViewController(viewModel: comparisonViewModel)
+        navigationController?.pushViewController(comparisonViewController, animated: true)
     }
 }
 
