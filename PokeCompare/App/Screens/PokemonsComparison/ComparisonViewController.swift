@@ -41,7 +41,9 @@ final class ComparisonViewController: UIViewController {
         viewModel.onError = { [weak self] message in
             self?.showError(message)
         }
-        //TODO: - viewModel.onLoading
+        viewModel.onLoading = { [weak self] isLoading in
+            self?.comparisonView.setLoading(isLoading)
+        }
     }
     
     private func showError(_ error: String) {

@@ -12,11 +12,12 @@ final class ComparisonView: UIView {
     // MARK: - Private Properties
     private let firstColumn = PokemonColumnView()
     private let secondColumn = PokemonColumnView()
+    private let spinner = UIActivityIndicatorView()
     
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor(resource: .pokeBackgroundCardGrey)
         
         setupViews()
         setupConstraints()
@@ -32,12 +33,24 @@ final class ComparisonView: UIView {
         secondColumn.configure(with: right)
     }
     
+    func setLoading(_ isLoading: Bool) {
+        firstColumn.isHidden = isLoading
+        secondColumn.isHidden = isLoading
+        if isLoading {
+            spinner.startAnimating()
+        } else {
+            spinner.stopAnimating()
+        }
+    }
+    
     // MARK: - Private Methods
     private func setupViews() {
         firstColumn.translatesAutoresizingMaskIntoConstraints = false
         secondColumn.translatesAutoresizingMaskIntoConstraints = false
+        spinner.translatesAutoresizingMaskIntoConstraints = false
         addSubview(firstColumn)
         addSubview(secondColumn)
+        addSubview(spinner)
     }
     
     private func setupConstraints() {
@@ -47,7 +60,9 @@ final class ComparisonView: UIView {
             firstColumn.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             secondColumn.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             secondColumn.topAnchor.constraint(equalTo: firstColumn.topAnchor),
-            firstColumn.trailingAnchor.constraint(equalTo: secondColumn.leadingAnchor, constant: -16)
+            firstColumn.trailingAnchor.constraint(equalTo: secondColumn.leadingAnchor, constant: -16),
+            spinner.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            spinner.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor)
         ])
     }
 }
