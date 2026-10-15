@@ -38,14 +38,14 @@ final class ComparisonViewController: UIViewController {
         viewModel.onResult = { [weak self]  left, right in
             self?.comparisonView.configure(left: left, right: right)
         }
-        viewModel.onError = { [weak self] error in
-            self?.showError(error)
+        viewModel.onError = { [weak self] message in
+            self?.showError(message)
         }
         //TODO: - viewModel.onLoading
     }
     
-    private func showError(_ error: Error) {
-        let controller = UIAlertController(title: "Ошибка", message: "Проблема с загрузкой данных", preferredStyle: .alert)
+    private func showError(_ error: String) {
+        let controller = UIAlertController(title: "Ошибка", message: "\(error)", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel)
         controller.addAction(action)
         present(controller, animated: true)

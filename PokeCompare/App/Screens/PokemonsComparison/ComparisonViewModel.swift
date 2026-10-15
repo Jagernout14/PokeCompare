@@ -16,7 +16,7 @@ final class ComparisonViewModel {
     
     // MARK: - Callbacks
     var onLoading: ((Bool) -> Void)?
-    var onError: ((Error) -> Void)?
+    var onError: ((String) -> Void)?
     var onResult: ((PokemonColumnDisplay, PokemonColumnDisplay) -> Void)?
     
     // MARK: - Initializers
@@ -40,7 +40,12 @@ final class ComparisonViewModel {
                 let (leftDisplay, rightDisplay) = makeDisplays(left: leftPokemon, right: rightPokemon)
                 onResult?(leftDisplay, rightDisplay)
             } catch {
-                onError?(error)
+                print(error)
+                let networkError = error as? NetworkError
+                if networkError?.isCancelled == true { return }
+                let message = networkError?.userMessage
+                let finalMessage = message ?? "Что-то пошло не так"
+                onError?(finalMessage)
             }
         }
     }

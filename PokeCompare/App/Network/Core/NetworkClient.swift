@@ -18,7 +18,7 @@ final class NetworkClient: NetworkClientProtocol {
         do {
             (data, response) = try await URLSession.shared.data(for: request)
         } catch {
-            throw NetworkError.noInternet
+            throw NetworkError.transport(error)
         }
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -41,7 +41,7 @@ final class NetworkClient: NetworkClientProtocol {
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            throw NetworkError.decodeError
+            throw NetworkError.decoding(error)
         }
     }
 }
