@@ -44,13 +44,24 @@ final class PokemonListViewController: UIViewController {
         viewModel.onPokemonsUpdated = { [weak self] in
             self?.listView.tableView.reloadData()
         }
-        viewModel.onError = { message in
-            print(message)
+        viewModel.onError = { [weak self] message in
+            self?.showError(message)
         }
     }
     
     private func setupActions() {
         listView.compareButton.addTarget(self, action: #selector(compareTapped), for: .touchUpInside)
+    }
+    
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: "\(message)", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel)
+        let retryAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            self?.viewModel.retry()
+        }
+        alert.addAction(okAction)
+        alert.addAction(retryAction)
+        present(alert, animated: true)
     }
     
     @objc private func compareTapped() {

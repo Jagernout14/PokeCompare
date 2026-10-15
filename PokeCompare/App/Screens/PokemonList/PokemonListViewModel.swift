@@ -24,6 +24,7 @@ final class PokemonListViewModel {
     private var offset = 0
     private var isLoading = false
     private var hasMore = true
+    private var loadFailed = false
     
     // MARK: - Initializers
     init(client: NetworkClientProtocol) {
@@ -32,7 +33,7 @@ final class PokemonListViewModel {
     
     // MARK: - Public Methods
     func loadPokemons() {
-        guard !isLoading, hasMore else {
+        guard !isLoading, hasMore, !loadFailed else {
             return
         }
         isLoading = true
@@ -45,7 +46,11 @@ final class PokemonListViewModel {
                 offset += limit
                 onPokemonsUpdated?()
             } catch {
-                let message = (error as? NetworkError)?.userMessage ?? "Что-то пошло не так"
+                print(error)
+                let networkError = error as? NetworkError
+                if networkError?.isCancelled == true { return }
+                let message = networkError?.userMessage ?? "Что-то пошло не так"
+                loadFailed = true
                 onError?(message)
             }
         }
@@ -64,5 +69,10 @@ final class PokemonListViewModel {
         } else {
             selected.append(item)
         }
+    }
+    
+    func retry() {
+        loadFailed = false
+        loadPokemons()
     }
 }
