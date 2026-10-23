@@ -3,9 +3,10 @@
 An iOS app for comparing two Pokémon side by side. Browse the Pokédex, pick any two Pokémon, and see whose stats come out on top.
 
 Built with **UIKit (100% programmatic UI)**, **MVVM**, and a **protocol-oriented networking layer** on top of [PokéAPI](https://pokeapi.co).
+
 | Pokémon list | Comparison |
 |:---:|:---:|
-| ![List](Screenshots/list.png) | ![Comparison](Screenshots/comparison.png) |
+| <img src="Screenshots/list.png" width="250"> | <img src="Screenshots/comparison.png" width="250"> |
 
 ## Features
 
@@ -47,14 +48,14 @@ View (UIView)  ←  ViewController  ←→  ViewModel  →  NetworkClientProtoco
 
 1. Clone the repository
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/Jagernout14/PokeCompare.git
    ```
 2. Open the project in Xcode. Dependencies (Kingfisher) are resolved via Swift Package Manager.
 3. Build and run on a simulator or device.
 
 No API key is required: PokéAPI is free and open.
 
-**Requirements:** iOS 18.6+, Xcode  27
+**Requirements:** iOS 18.6+, Xcode 27+
 
 ## What I'd improve next
 
