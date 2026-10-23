@@ -51,6 +51,7 @@ final class PokemonListCell: UITableViewCell {
         setupStackView()
         setupCheckmark()
         setupConstraints()
+        backgroundColor = UIColor(resource: .pokeBackgroundCardGrey)
     }
     
     private func setupImage() {

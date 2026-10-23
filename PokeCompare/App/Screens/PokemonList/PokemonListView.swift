@@ -16,7 +16,7 @@ final class PokemonListView: UIView {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor(resource: .pokeBackgroundGrey)
+        backgroundColor = UIColor(resource: .pokeBackgroundCardGrey)
         setupUI()
     }
     
@@ -32,7 +32,7 @@ final class PokemonListView: UIView {
     }
     
     private func setupTableView() {
-        tableView.backgroundColor = UIColor(resource: .pokeBackgroundGrey)
+        tableView.backgroundColor = UIColor(resource: .pokeBackgroundCardGrey)
         tableView.register(PokemonListCell.self, forCellReuseIdentifier: PokemonListCell.reuseIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 72

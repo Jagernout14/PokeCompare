@@ -13,7 +13,6 @@ final class PokemonColumnView: UIView {
     // MARK: - Private Properties
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor(resource: .pokeSecondaryTextGrey)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
